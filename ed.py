@@ -250,6 +250,7 @@ if __name__ == '__main__':
     logging.info("Minimum edit distance is {}".format(minimumEditDistance))
     solutions = computeOperations(ed, initialString, finalString, args.record_noops)
 
+    print("")
     for (index,s) in enumerate(solutions):
         logging.info("Solution: {}".format(index))
         printSolution(s, initialString, finalString)
