@@ -112,9 +112,9 @@ def computeEditDistance(initialString, finalString):
 
             # Record the operation(s) that give the minimum cost for
             # backtracing purposes
-            previousCost = costs[0][0]
+            minimumCost = costs[0][0]
             for (costValue, costType) in costs:
-                if costValue > previousCost:
+                if costValue > minimumCost:
                     break
 
                 table[i][j].operations.append( costType )
