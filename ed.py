@@ -94,34 +94,30 @@ def computeEditDistance(initialString, finalString):
             initalStringIndex = i - 1
             finalStringIndex = j - 1
 
+            # Calculate the cost of each type of operation and pair with the type
+            # of operation which will be stored for backtracing later
+            costs= [ (table[i][j-1].value + Insertion.cost, Insertion ),
+                     (table[i-1][j].value + Deletion.cost, Deletion ),
+                     (table[i-1][j-1].value + Substitution.cost, Substitution)
+                   ]
+
             if initialString[initalStringIndex] == finalString[finalStringIndex]:
-                # No operation is needed to transform this character
-                table[i][j].value = table[i-1][j-1].value
-                table[i][j].operations.append( NoOp )
-            else:
-                # An operation is required
-                
-                # Calculate the cost of each type of operation and pair with the type
-                # of operation which will be stored for backtracing later
-                costs= [ (table[i][j-1].value + Insertion.cost, Insertion ),
-                         (table[i-1][j].value + Deletion.cost, Deletion ),
-                         (table[i-1][j-1].value + Substitution.cost, Substitution)
-                       ]
+                costs.append( (table[i-1][j-1].value, NoOp) )
 
-                # Do in-place sort, sorting by the cost of the operation
-                costs.sort(key= lambda pair: pair[0])
+            # Do in-place sort, sorting by the cost of the operation
+            costs.sort(key= lambda pair: pair[0])
 
-                # Record the minimum cost
-                table[i][j].value = costs[0][0]
+            # Record the minimum cost
+            table[i][j].value = costs[0][0]
 
-                # Record the operation(s) that give the minimum cost for
-                # backtracing purposes
-                previousCost = costs[0][0]
-                for (costValue, costType) in costs:
-                    if costValue > previousCost:
-                        break
+            # Record the operation(s) that give the minimum cost for
+            # backtracing purposes
+            previousCost = costs[0][0]
+            for (costValue, costType) in costs:
+                if costValue > previousCost:
+                    break
 
-                    table[i][j].operations.append( costType )
+                table[i][j].operations.append( costType )
 
     logging.info('Calculation complete')
     printTable(table, initialString, finalString)
